@@ -166,7 +166,40 @@ export default function HomePage() {
             🎮 Join the Matching Game
           </h1>
           <p className="mt-2 text-sm text-orange-900/80">
-            Enter the event code and leave hints so your friends can guess who you are.
+            🕵️ <strong>The Story</strong>
+            <br />
+            Just like King Jeongjo never traveled alone—he always had loyal
+            companions beside him— you also have a secret travel companion in
+            this journey. But here’s the twist: you don’t know who they are…
+            yet. Throughout the festival, you will receive small clues about
+            your hidden friend: • “He is wearing something blue.” • “She comes
+            from Europe.” • “He loves K-pop music.” Piece by piece, you’ll
+            uncover their identity—just like solving a royal mystery inside the
+            fortress walls.
+          </p>
+
+          <p className="mt-2 text-sm text-orange-900/80">
+            📸 <strong>The Mission</strong>
+            <br />
+            Before the end of today’s journey, your challenge is simple but
+            meaningful: • Find your secret friend. • Take a photo together at
+            the festival. • Send it to the KOPLE team. If you succeed, you’ve
+            completed your mission—just like completing a chapter of your own
+            Hwaseong story. 🎉
+          </p>
+
+          <p className="mt-2 text-sm text-orange-900/80">
+            ✨ <strong>Remember</strong>
+            <br />• There’s no winner or loser in this game. • The real prize is
+            making a genuine connection, just as people did centuries ago when
+            they came together at this very fortress. • Use the hints, enjoy the
+            festival, and let history guide you to your friend.
+          </p>
+
+          <p className="mt-2 text-sm text-orange-900/80">
+            👉 Tonight, under the lights of Hwaseong, your adventure isn’t only
+            about watching the festival. It’s about discovering a new friend,
+            writing your own story, and becoming part of Korea’s living history.
           </p>
         </header>
 
