@@ -278,7 +278,8 @@ export default function HomePage() {
 
             <div>
               <label className="block text-sm font-semibold text-orange-900">
-                Nickname (visible to others)
+                Write your name without the surname — that’s the name people
+                will guess
               </label>
               <input
                 type="text"
