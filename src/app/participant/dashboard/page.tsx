@@ -9,7 +9,8 @@ import {
   where,
   getDocs,
   doc,
-  getDoc
+  getDoc,
+  collectionGroup
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Participant, ParticipantMatchInfo, Hint, Event, Round } from '@/types';
@@ -48,7 +49,7 @@ export default function ParticipantDashboard() {
     try {
       // Find participant data for this user
       const participantsQuery = query(
-        collection(db, 'participants'),
+        collectionGroup(db, 'participants'),
         where('createdBy', '==', user.uid)
       );
       const participantsSnapshot = await getDocs(participantsQuery);
