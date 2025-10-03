@@ -18,8 +18,8 @@ export default function HomePage() {
 
   const hintLabels = [
     "H1. Favorite music genre",
-    "H2. Favorite sport/team",
-    "H3. Favorite exclamation/emoji",
+    "H2. Which ability would you rather have: becoming invisible or flying in the sky?",
+    "H3. How do you define love? ",
     "H4. Color NOT in my outfit today",
     "H5. Phone case color/pattern",
     "H6. Name initials",
