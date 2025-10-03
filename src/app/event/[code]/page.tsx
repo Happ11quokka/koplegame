@@ -45,7 +45,7 @@ export default function EventPage() {
   useEffect(() => {
     const storedNickname = localStorage.getItem('myNickname') || '';
     if (!storedNickname) {
-      alert('닉네임 정보가 없습니다. 처음 화면에서 다시 로그인해주세요.');
+      alert('No nickname found. Please login again from the home screen.');
       router.push('/');
       return;
     }
@@ -60,7 +60,7 @@ export default function EventPage() {
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
-        alert('이벤트를 찾을 수 없습니다');
+        alert('Event not found');
         setLoading(false);
         return;
       }
@@ -100,7 +100,7 @@ export default function EventPage() {
       setLoading(false);
     } catch (err) {
       console.error(err);
-      alert('힌트 불러오기 실패');
+      alert('Failed to load hints');
       setLoading(false);
     }
   };
@@ -109,7 +109,7 @@ export default function EventPage() {
     if (!selectedHint || !guess.trim()) return;
 
     if (guess.trim().toLowerCase() === selectedHint.nickname.toLowerCase()) {
-      alert('🎉 정답입니다!');
+      alert('🎉 Correct!');
 
       try {
         const hintRef = doc(db, `events/${eventId}/hints`, selectedHint.id);
@@ -122,10 +122,10 @@ export default function EventPage() {
         loadHints(myNickname);
       } catch (err) {
         console.error(err);
-        alert('정답 기록에 실패했습니다. 다시 시도해주세요.');
+        alert('Failed to record correct answer. Please try again.');
       }
     } else {
-      alert('❌ 틀렸습니다. 다시 시도하세요!');
+      alert('❌ Incorrect. Try again!');
       setGuess('');
     }
   };
@@ -135,7 +135,7 @@ export default function EventPage() {
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-orange-200 via-orange-100 to-white px-4">
         <div className="text-center text-orange-900">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-orange-300 border-t-transparent"></div>
-          <p className="text-sm font-semibold">힌트 불러오는 중...</p>
+          <p className="text-sm font-semibold">Loading hints...</p>
         </div>
       </div>
     );
@@ -149,10 +149,10 @@ export default function EventPage() {
       <div className="mx-auto max-w-5xl space-y-6">
         <header className="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-orange-200 backdrop-blur">
           <h1 className="text-2xl font-extrabold text-orange-900 sm:text-3xl">
-            🎮 {eventCode} 매칭 게임
+            🎮 {eventCode} Matching Game
           </h1>
           <p className="mt-2 text-sm text-orange-900/80">
-            내 닉네임: <strong>{myNickname}</strong> | 맞춘 사람: <strong>{myMatches.length}명</strong>
+            My Nickname: <strong>{myNickname}</strong> | Matched: <strong>{myMatches.length} people</strong>
           </p>
         </header>
 
@@ -160,28 +160,28 @@ export default function EventPage() {
           <section className="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-orange-200 backdrop-blur">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-orange-900">
-                💡 힌트 상세보기 #{selectedHint.order}
+                💡 Hint Details #{selectedHint.order}
               </h2>
               <button
                 onClick={() => setSelectedHint(null)}
                 className="text-sm font-semibold text-orange-500 transition hover:text-orange-600"
               >
-                ← 목록으로 돌아가기
+                ← Back to List
               </button>
             </div>
 
             <div className="mt-6 grid gap-4">
-              <DetailRow label="H1. 음악 장르" value={selectedHint.h1} />
-              <DetailRow label="H2. 스포츠/팀" value={selectedHint.h2} />
-              <DetailRow label="H3. 감탄사/이모지" value={selectedHint.h3} />
-              <DetailRow label="H4. 상의 색깔" value={selectedHint.h4} />
-              <DetailRow label="H5. 폰 케이스" value={selectedHint.h5} />
-              <DetailRow label="H6. 이름 이니셜" value={selectedHint.h6} />
+              <DetailRow label="H1. Music Genre" value={selectedHint.h1} />
+              <DetailRow label="H2. Sport/Team" value={selectedHint.h2} />
+              <DetailRow label="H3. Exclamation/Emoji" value={selectedHint.h3} />
+              <DetailRow label="H4. Color NOT in Outfit" value={selectedHint.h4} />
+              <DetailRow label="H5. Phone Case" value={selectedHint.h5} />
+              <DetailRow label="H6. Name Initials" value={selectedHint.h6} />
             </div>
 
             <div className="mt-8 rounded-2xl bg-orange-50 px-4 py-5">
               <label className="block text-sm font-semibold text-orange-900">
-                이 사람이 누구인지 추측해보세요
+                Guess who this person is
               </label>
               <div className="mt-3 flex flex-col gap-3 sm:flex-row">
                 <input
@@ -189,14 +189,14 @@ export default function EventPage() {
                   value={guess}
                   onChange={(e) => setGuess(e.target.value)}
                   className="w-full rounded-xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-orange-900 shadow-sm outline-none ring-orange-400 transition focus:border-orange-400 focus:ring"
-                  placeholder="닉네임 입력"
+                  placeholder="Enter nickname"
                   onKeyDown={(e) => e.key === 'Enter' && handleGuess()}
                 />
                 <button
                   onClick={handleGuess}
                   className="w-full rounded-xl bg-orange-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-orange-200 transition hover:bg-orange-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 sm:w-auto"
                 >
-                  확인
+                  Confirm
                 </button>
               </div>
             </div>
@@ -205,15 +205,15 @@ export default function EventPage() {
           <section className="space-y-4">
             <div className="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-orange-200 backdrop-blur">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-orange-900">🎯 참가자 힌트 목록</h2>
+                <h2 className="text-xl font-bold text-orange-900">🎯 Participant Hint List</h2>
                 <span className="text-sm font-semibold text-orange-500">
-                  내 매칭 {myMatches.length}명
+                  My Matches: {myMatches.length}
                 </span>
               </div>
 
               {otherHints.length === 0 ? (
                 <div className="mt-6 rounded-2xl bg-orange-50 px-4 py-6 text-center text-sm text-orange-900/70">
-                  아직 다른 참가자가 없습니다. 친구들에게 링크를 공유해보세요!
+                  No other participants yet. Share the link with your friends!
                 </div>
               ) : (
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -227,11 +227,11 @@ export default function EventPage() {
                       >
                         <div className="flex items-start justify-between">
                           <h3 className="text-base font-semibold text-orange-900">
-                            참가자 #{hint.order}
+                            Participant #{hint.order}
                           </h3>
                           {matched && (
                             <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                              ✓ 맞춤
+                              ✓ Matched
                             </span>
                           )}
                         </div>
@@ -241,7 +241,7 @@ export default function EventPage() {
                           <div>💬 {hint.h3}</div>
                         </div>
                         <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-orange-400">
-                          클릭하여 전체 힌트 보기 →
+                          Click to view all hints →
                         </div>
                       </button>
                     );
@@ -253,16 +253,16 @@ export default function EventPage() {
         )}
 
         <section className="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-orange-200 backdrop-blur">
-          <h3 className="text-lg font-bold text-orange-900">📝 내 힌트</h3>
+          <h3 className="text-lg font-bold text-orange-900">📝 My Hints</h3>
           {myHintEntries.length === 0 ? (
             <p className="mt-4 text-sm text-orange-900/70">
-              내 힌트가 아직 보이지 않나요? 처음 화면에서 입력을 완료했는지 확인해주세요.
+              Don't see your hints? Please check if you completed the input on the home screen.
             </p>
           ) : (
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {myHintEntries.map((hint) => (
                 <div key={hint.id} className="rounded-2xl bg-orange-50 px-4 py-4 text-sm text-orange-900">
-                  <p className="text-xs font-semibold text-orange-500">참가자 #{hint.order}</p>
+                  <p className="text-xs font-semibold text-orange-500">Participant #{hint.order}</p>
                   <p>H1: {hint.h1}</p>
                   <p>H2: {hint.h2}</p>
                   <p>H3: {hint.h3}</p>
@@ -270,7 +270,7 @@ export default function EventPage() {
                   <p>H5: {hint.h5}</p>
                   <p>H6: {hint.h6}</p>
                   <p className="mt-2 text-xs text-orange-900/70">
-                    {hint.matchedBy.length}명이 나를 맞췄습니다
+                    {hint.matchedBy.length} people matched me
                   </p>
                 </div>
               ))}
@@ -291,7 +291,7 @@ function DetailRow({ label, value }: DetailRowProps) {
   return (
     <div className="rounded-2xl bg-orange-50 px-4 py-3 text-sm text-orange-900">
       <span className="font-semibold">{label}</span>
-      <div className="mt-1 text-orange-900/80">{value || '정보 없음'}</div>
+      <div className="mt-1 text-orange-900/80">{value || 'No information'}</div>
     </div>
   );
 }

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "매칭 게임 - Kople",
-  description: "힌트로 친구 찾기 게임",
+  title: "Matching Game - Kople",
+  description: "Find your friends using hints",
 };
 
 export const viewport: Viewport = {
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}
       >
