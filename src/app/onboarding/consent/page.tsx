@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ShieldCheckIcon, EyeSlashIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
-export default function ConsentPage() {
+function ConsentContent() {
   const [eventTitle, setEventTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [agreementChecked, setAgreementChecked] = useState(false);
@@ -224,5 +224,17 @@ export default function ConsentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConsentPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ConsentContent />
+    </Suspense>
   );
 }

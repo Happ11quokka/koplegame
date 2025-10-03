@@ -54,6 +54,7 @@ export default function EventManagePage({ params }: EventPageProps) {
     name: '',
     visibleLevels: [] as HintLevel[]
   });
+  const [eventUrl, setEventUrl] = useState('');
 
   const { user, isAdmin } = useAuth();
   const router = useRouter();
@@ -67,6 +68,13 @@ export default function EventManagePage({ params }: EventPageProps) {
     }
     fetchEventData();
   }, [user, isAdmin, params.eventId]);
+
+  useEffect(() => {
+    // Set event URL on client side only
+    if (typeof window !== 'undefined' && event) {
+      setEventUrl(`${window.location.origin}/?code=${event.code}`);
+    }
+  }, [event]);
 
   const fetchEventData = async () => {
     try {
@@ -472,7 +480,7 @@ export default function EventManagePage({ params }: EventPageProps) {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  value={`${typeof window !== 'undefined' ? window.location.origin : ''}/?code=${event?.code}`}
+                  value={eventUrl}
                   readOnly
                   className="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm"
                 />

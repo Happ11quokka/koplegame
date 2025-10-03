@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { UserIcon, LanguageIcon } from '@heroicons/react/24/outline';
 import { signInAnonymously_Client } from '@/lib/firebase/auth';
@@ -19,7 +19,7 @@ const AVAILABLE_LANGUAGES: { code: Language; name: string; flag: string }[] = [
 
 const EMOJI_OPTIONS = ['😊', '🎉', '🌟', '🎯', '🚀', '💫', '🎪', '🎨', '🎵', '⚡', '🌈', '🎭'];
 
-export default function ProfileSetupPage() {
+function ProfileSetupContent() {
   const [displayName, setDisplayName] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('en');
   const [selectedEmoji, setSelectedEmoji] = useState('😊');
@@ -243,5 +243,17 @@ export default function ProfileSetupPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProfileSetupPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ProfileSetupContent />
+    </Suspense>
   );
 }

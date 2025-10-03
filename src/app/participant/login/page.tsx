@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signInWithEmail } from '@/lib/firebase/auth';
 import { useAuth } from '@/lib/contexts/AuthContext';
@@ -11,7 +11,7 @@ import {
   ArrowRightIcon
 } from '@heroicons/react/24/outline';
 
-export default function ParticipantLoginPage() {
+function ParticipantLoginContent() {
   const [participantId, setParticipantId] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -229,5 +229,17 @@ export default function ParticipantLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ParticipantLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ParticipantLoginContent />
+    </Suspense>
   );
 }
