@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { collection, getDocs, query, where, updateDoc, doc, arrayUnion } from 'firebase/firestore';
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  Timestamp,
+  updateDoc,
+  where
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 interface Hint {
@@ -15,6 +25,8 @@ interface Hint {
   h5: string;
   h6: string;
   matchedBy: string[];
+  createdAt?: Timestamp;
+  order?: number;
 }
 
 export default function EventPage() {
@@ -58,12 +70,24 @@ export default function EventPage() {
       setEventId(eventDocId);
 
       const hintsRef = collection(db, `events/${eventDocId}/hints`);
-      const hintsSnapshot = await getDocs(hintsRef);
+      const hintsSnapshot = await getDocs(query(hintsRef, orderBy('createdAt', 'asc')));
 
-      const hintsData = hintsSnapshot.docs.map((hintDoc) => ({
-        id: hintDoc.id,
-        ...hintDoc.data()
-      } as Hint));
+      const hintsData = hintsSnapshot.docs.map((hintDoc, index) => {
+        const data = hintDoc.data();
+        return {
+          id: hintDoc.id,
+          order: index + 1,
+          createdAt: data.createdAt as Timestamp | undefined,
+          nickname: data.nickname as string,
+          h1: data.h1 as string,
+          h2: data.h2 as string,
+          h3: data.h3 as string,
+          h4: data.h4 as string,
+          h5: data.h5 as string,
+          h6: data.h6 as string,
+          matchedBy: (data.matchedBy as string[]) || []
+        } satisfies Hint;
+      });
 
       setHints(hintsData);
       const effectiveNickname = nicknameFromStorage || myNickname;
@@ -95,7 +119,7 @@ export default function EventPage() {
 
         setSelectedHint(null);
         setGuess('');
-        loadHints();
+        loadHints(myNickname);
       } catch (err) {
         console.error(err);
         alert('정답 기록에 실패했습니다. 다시 시도해주세요.');
@@ -135,7 +159,9 @@ export default function EventPage() {
         {selectedHint ? (
           <section className="rounded-3xl bg-white/95 p-6 shadow-xl ring-1 ring-orange-200 backdrop-blur">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-orange-900">💡 힌트 상세보기</h2>
+              <h2 className="text-xl font-bold text-orange-900">
+                💡 힌트 상세보기 #{selectedHint.order}
+              </h2>
               <button
                 onClick={() => setSelectedHint(null)}
                 className="text-sm font-semibold text-orange-500 transition hover:text-orange-600"
@@ -200,7 +226,9 @@ export default function EventPage() {
                         className="rounded-2xl bg-white px-4 py-5 text-left shadow-md ring-1 ring-orange-100 transition hover:-translate-y-1 hover:shadow-lg"
                       >
                         <div className="flex items-start justify-between">
-                          <h3 className="text-base font-semibold text-orange-900">참가자</h3>
+                          <h3 className="text-base font-semibold text-orange-900">
+                            참가자 #{hint.order}
+                          </h3>
                           {matched && (
                             <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
                               ✓ 맞춤
@@ -234,6 +262,7 @@ export default function EventPage() {
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {myHintEntries.map((hint) => (
                 <div key={hint.id} className="rounded-2xl bg-orange-50 px-4 py-4 text-sm text-orange-900">
+                  <p className="text-xs font-semibold text-orange-500">참가자 #{hint.order}</p>
                   <p>H1: {hint.h1}</p>
                   <p>H2: {hint.h2}</p>
                   <p>H3: {hint.h3}</p>
