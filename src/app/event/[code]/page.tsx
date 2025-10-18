@@ -23,6 +23,9 @@ interface Hint {
   h3: string;
   h4: string;
   h5: string;
+  h6: string;
+  h7: string;
+  h8: string;
   matchedBy: string[];
   createdAt?: Timestamp;
   order?: number;
@@ -83,6 +86,9 @@ export default function EventPage() {
           h3: data.h3 as string,
           h4: data.h4 as string,
           h5: data.h5 as string,
+          h6: data.h6 as string,
+          h7: data.h7 as string,
+          h8: data.h8 as string,
           matchedBy: (data.matchedBy as string[]) || []
         } satisfies Hint;
       });
@@ -170,24 +176,36 @@ export default function EventPage() {
 
             <div className="mt-6 grid gap-4">
               <DetailRow
-                label="H1. 10 billion won or unlimited travel?"
+                label="H1. Did you have breakfast? What did you eat?"
                 value={selectedHint.h1}
               />
               <DetailRow
-                label="H2. Breakfast update"
+                label="H2. Are you an introvert or an extrovert?"
                 value={selectedHint.h2}
               />
               <DetailRow
-                label="H3. If you were a food"
+                label="H3. Who's your celebrity crush?"
                 value={selectedHint.h3}
               />
               <DetailRow
-                label="H4. Country hint"
+                label="H4. How many KOPLE trips have you joined?"
                 value={selectedHint.h4}
               />
               <DetailRow
-                label="H5. Personal hint"
+                label="H5. What color am I not wearing today?"
                 value={selectedHint.h5}
+              />
+              <DetailRow
+                label="H6. What's your second language (not your mother tongue)?"
+                value={selectedHint.h6}
+              />
+              <DetailRow
+                label="H7. What's the place in Korea you want to visit the most?"
+                value={selectedHint.h7}
+              />
+              <DetailRow
+                label="H8. Coffee person or matcha person?"
+                value={selectedHint.h8}
               />
             </div>
 
@@ -248,9 +266,9 @@ export default function EventPage() {
                           )}
                         </div>
                         <div className="mt-4 space-y-2 text-sm text-orange-900/80">
-                          <div>💰 {hint.h1}</div>
-                          <div>🍳 {hint.h2}</div>
-                          <div>🍽️ {hint.h3}</div>
+                          <div>🍳 {hint.h1}</div>
+                          <div>🧭 {hint.h2}</div>
+                          <div>🎬 {hint.h3}</div>
                         </div>
                         <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-orange-400">
                           Click to view all hints →
@@ -280,6 +298,9 @@ export default function EventPage() {
                   <p>H3: {hint.h3}</p>
                   <p>H4: {hint.h4}</p>
                   <p>H5: {hint.h5}</p>
+                  <p>H6: {hint.h6}</p>
+                  <p>H7: {hint.h7}</p>
+                  <p>H8: {hint.h8}</p>
                   <p className="mt-2 text-xs text-orange-900/70">
                     {hint.matchedBy.length} people matched me
                   </p>
