@@ -10,19 +10,18 @@ export default function HomePage() {
   const [formMode, setFormMode] = useState<"join" | "login">("join");
   const [eventCode, setEventCode] = useState("");
   const [nickname, setNickname] = useState("");
-  const [hints, setHints] = useState(["", "", "", "", "", ""]);
+  const [hints, setHints] = useState(["", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState("");
   const [loginError, setLoginError] = useState("");
 
   const hintLabels = [
-    "H1. Favorite music genre",
-    "H2. Which ability would you rather have: becoming invisible or flying in the sky?",
-    "H3. How do you define love? ",
-    "H4. Color NOT in my outfit today",
-    "H5. Phone case color/pattern",
-    "H6. Name initials",
+    "H1. 10 billion won right now or unlimited travel forever - which one?",
+    "H2. What did you have for breakfast today? (Or... why didn't you?)",
+    "H3. If you were a food, what food would you be?",
+    "H4. Give us one hint about the country you're from.",
+    "H5. Give us one hint about yourself - maybe from your outfit or your phone case.",
   ];
 
   const handleHintChange = (index: number, value: string) => {
@@ -73,7 +72,6 @@ export default function HomePage() {
         h3: hints[2],
         h4: hints[3],
         h5: hints[4],
-        h6: hints[5],
         createdAt: new Date(),
         matchedBy: [],
       });

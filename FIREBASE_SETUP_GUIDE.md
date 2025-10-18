@@ -101,7 +101,6 @@ Firebase Console → Firestore Database → 데이터 탭에서:
    title: "Test Event" (string)
    status: "draft" (string)
    langs: ["en", "ko"] (array)
-   h6CommonQuestion: "Test question?" (string)
    matchingCreated: false (boolean)
    createdAt: [현재 시간] (timestamp)
    updatedAt: [현재 시간] (timestamp)

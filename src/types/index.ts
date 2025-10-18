@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
 // Core Types
-export type HintLevel = 'H1' | 'H2' | 'H3' | 'H4' | 'H5' | 'H6';
+export type HintLevel = 'H1' | 'H2' | 'H3' | 'H4' | 'H5';
 export type Language = 'en' | 'ko' | 'ja' | 'zh' | 'es' | 'fr';
 export type EventStatus = 'draft' | 'waiting_for_matching' | 'live' | 'ended';
 export type MatchStatus = 'pending' | 'found' | 'completed';
@@ -15,7 +15,6 @@ export interface Event {
   title: string;
   status: EventStatus;
   langs: Language[];
-  h6CommonQuestion: string;
   description?: string;
   location?: string;
   startTime?: Timestamp;
@@ -114,11 +113,6 @@ export interface HintPayload {
   wristAccessory?: 'none' | 'watch' | 'bracelet' | 'both';
   uniqueAccessory?: string;
 
-  // H6: Key Identifiers (almost answer)
-  nameInitials?: string;
-  originRegion?: string;
-  expectedSpot?: string;
-  currentCity?: string;
 }
 
 export interface Hint {

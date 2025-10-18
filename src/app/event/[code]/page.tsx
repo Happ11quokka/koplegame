@@ -23,7 +23,6 @@ interface Hint {
   h3: string;
   h4: string;
   h5: string;
-  h6: string;
   matchedBy: string[];
   createdAt?: Timestamp;
   order?: number;
@@ -84,7 +83,6 @@ export default function EventPage() {
           h3: data.h3 as string,
           h4: data.h4 as string,
           h5: data.h5 as string,
-          h6: data.h6 as string,
           matchedBy: (data.matchedBy as string[]) || []
         } satisfies Hint;
       });
@@ -171,12 +169,26 @@ export default function EventPage() {
             </div>
 
             <div className="mt-6 grid gap-4">
-              <DetailRow label="H1. Music Genre" value={selectedHint.h1} />
-              <DetailRow label="H2. Sport/Team" value={selectedHint.h2} />
-              <DetailRow label="H3. Exclamation/Emoji" value={selectedHint.h3} />
-              <DetailRow label="H4. Color NOT in Outfit" value={selectedHint.h4} />
-              <DetailRow label="H5. Phone Case" value={selectedHint.h5} />
-              <DetailRow label="H6. Name Initials" value={selectedHint.h6} />
+              <DetailRow
+                label="H1. 10 billion won or unlimited travel?"
+                value={selectedHint.h1}
+              />
+              <DetailRow
+                label="H2. Breakfast update"
+                value={selectedHint.h2}
+              />
+              <DetailRow
+                label="H3. If you were a food"
+                value={selectedHint.h3}
+              />
+              <DetailRow
+                label="H4. Country hint"
+                value={selectedHint.h4}
+              />
+              <DetailRow
+                label="H5. Personal hint"
+                value={selectedHint.h5}
+              />
             </div>
 
             <div className="mt-8 rounded-2xl bg-orange-50 px-4 py-5">
@@ -236,9 +248,9 @@ export default function EventPage() {
                           )}
                         </div>
                         <div className="mt-4 space-y-2 text-sm text-orange-900/80">
-                          <div>🎵 {hint.h1}</div>
-                          <div>⚽ {hint.h2}</div>
-                          <div>💬 {hint.h3}</div>
+                          <div>💰 {hint.h1}</div>
+                          <div>🍳 {hint.h2}</div>
+                          <div>🍽️ {hint.h3}</div>
                         </div>
                         <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-orange-400">
                           Click to view all hints →
@@ -268,7 +280,6 @@ export default function EventPage() {
                   <p>H3: {hint.h3}</p>
                   <p>H4: {hint.h4}</p>
                   <p>H5: {hint.h5}</p>
-                  <p>H6: {hint.h6}</p>
                   <p className="mt-2 text-xs text-orange-900/70">
                     {hint.matchedBy.length} people matched me
                   </p>
