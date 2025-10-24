@@ -10,21 +10,19 @@ export default function HomePage() {
   const [formMode, setFormMode] = useState<"join" | "login">("join");
   const [eventCode, setEventCode] = useState("");
   const [nickname, setNickname] = useState("");
-  const [hints, setHints] = useState(["", "", "", "", "", "", "", ""]);
+  const [hints, setHints] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState("");
   const [loginError, setLoginError] = useState("");
 
   const hintLabels = [
-    "H1. Did you have breakfast? What did you eat?",
-    "H2. Are you an introvert or an extrovert?",
-    "H3. Who's your celebrity crush?",
-    "H4. How many KOPLE trips have you joined?",
-    "H5. What color am I not wearing today?",
-    "H6. What's your second language (not your mother tongue)?",
-    "H7. What's the place in Korea you want to visit the most?",
-    "H8. Coffee person or matcha person?",
+    "H1. What did you eat for breakfast?",
+    "H2. What is your best moment in Korea?",
+    "H3. If you could have dinner with any famous person (alive or dead), who would it be? And why?",
+    "H4. What song have you been listening to the most lately?",
+    "H5. If money and time didn't matter, where would you want to go the most?",
+    'H6. What does "love" mean to you?',
   ];
 
   const handleHintChange = (index: number, value: string) => {
@@ -76,8 +74,6 @@ export default function HomePage() {
         h4: hints[3],
         h5: hints[4],
         h6: hints[5],
-        h7: hints[6],
-        h8: hints[7],
         createdAt: new Date(),
         matchedBy: [],
       });
