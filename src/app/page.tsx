@@ -168,11 +168,11 @@ export default function HomePage() {
           <p className="mt-2 text-sm text-orange-900/80">
             🕵️ <strong>The Story</strong>
             <br />
-            Just like King Jeongjo never traveled alone—he always had loyal
-            companions beside him— you also have a secret travel companion in
-            this journey. But here’s the twist: you don’t know who they are…
-            yet. Throughout the festival, you will receive small clues about
-            your hidden friend:
+            Just like the tide guides boats safely into Dangjin Port—crews
+            always relied on one another—you also have a secret travel companion
+            on this coastal journey. But here's the twist: you don't know who
+            they are… yet. Throughout the festival, you will receive small clues
+            about your hidden friend:
           </p>
           <ul className="list-disc list-inside mt-1 text-sm text-orange-900/80">
             <li>“He is wearing something blue.”</li>
@@ -180,8 +180,8 @@ export default function HomePage() {
             <li>“He loves K-pop music.”</li>
           </ul>
           <p className="mt-2 text-sm text-orange-900/80">
-            Piece by piece, you’ll uncover their identity—just like solving a
-            royal mystery inside the fortress walls.
+            Piece by piece, you'll uncover their identity—like tracing the
+            lighthouse beam across Dangjin's shoreline.
           </p>
 
           <p className="mt-4 text-sm text-orange-900/80">
@@ -196,8 +196,8 @@ export default function HomePage() {
             <li>Send it to the KOPLE team.</li>
           </ul>
           <p className="mt-2 text-sm text-orange-900/80">
-            If you succeed, you’ve completed your mission—just like completing a
-            chapter of your own Hwaseong story. 🎉
+            If you succeed, you've completed your mission—just like adding a new
+            memory to your own Dangjin shoreline story. 🎉
           </p>
 
           <p className="mt-4 text-sm text-orange-900/80">
@@ -206,19 +206,20 @@ export default function HomePage() {
           <ul className="list-disc list-inside mt-1 text-sm text-orange-900/80">
             <li>There’s no winner or loser in this game.</li>
             <li>
-              The real prize is making a genuine connection, just as people did
-              centuries ago when they came together at this very fortress.
+              The real prize is making a genuine connection, just as neighbors
+              have done for generations along Dangjin's harbors.
             </li>
             <li>
-              Use the hints, enjoy the festival, and let history guide you to
-              your friend.
+              Use the hints, enjoy the festival, and let the sea breeze guide
+              you to your friend.
             </li>
           </ul>
 
           <p className="mt-4 text-sm text-orange-900/80">
-            👉 Tonight, under the lights of Hwaseong, your adventure isn’t only
-            about watching the festival. It’s about discovering a new friend,
-            writing your own story, and becoming part of Korea’s living history.
+            👉 Tonight, under Dangjin's night sky beside the West Sea, your
+            adventure isn't only about watching the festival. It's about
+            discovering a new friend, writing your own story, and becoming part
+            of Korea's living history.
           </p>
         </header>
 
