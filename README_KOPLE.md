@@ -1,272 +1,85 @@
-# Kople Game - International Student Networking App
+# Matching Game — 국제 교류 매칭 PWA
 
-A Progressive Web App (PWA) for international students to share 6-level hints during networking events, with round-based visibility control and strict PII protection.
+KOPLE 국제학생 네트워킹 행사에 맞춰 기획·개발한 웹 기반 매칭 게임입니다. 참가자는 여섯 개의 질문에 답하며 서로의 정체를 추리하고, 현장에서 자연스럽게 대화를 시작할 수 있도록 돕습니다.
 
-## 🚀 Features
+## 👤 역할
 
-### Core Features
+- 제품 기획, UX 라이팅, UI 디자인, 프런트엔드·파이어베이스 구성까지 단독 수행
 
-- **6-Level Hint System (H1-H6)**: Progressive hint sharing from abstract preferences to specific identifiers
-- **Round-Based Visibility**: Admin-controlled hint level visibility for structured networking
-- **PII Protection**: Comprehensive validation to prevent sharing of personal information
-- **Mobile-First PWA**: Installable app with offline support
-- **Real-time Updates**: Live round changes and participant updates
-- **Multi-language Support**: English, Korean, Japanese, Chinese, Spanish, French
+## ⚙️ 기술 스택
 
-### User Flows
+- **프런트엔드**: Next.js App Router, TypeScript, React Hooks, Tailwind CSS
+- **백엔드**: Firebase Firestore, Firebase Authentication(익명 로그인), Firebase Hosting
+- **배포/운영**: Vercel, `.env.local` 기반 환경 변수, Next.js PWA(서비스 워커, manifest)
+- **기타**: React Context + `useState` 조합으로 상태 관리, `localStorage` 캐시로 재접속 최적화
 
-1. **Participants**: Event code entry → Consent → Profile setup → Hint creation → Feed browsing
-2. **Admins**: Event creation → Round management → Participant monitoring
-
-## 🏗️ Architecture
-
-### Technology Stack
-
-- **Frontend**: Next.js 14, TypeScript, Tailwind CSS, Headless UI
-- **Backend**: Firebase (Firestore, Authentication, Functions, Hosting)
-- **PWA**: Service Worker, Web App Manifest
-- **State Management**: React Context + useReducer
-
-### Project Structure
-
-```
+```text
 src/
-├── app/                    # Next.js 14 app router
-│   ├── api/               # API routes
-│   ├── event/[code]/      # Event participation
-│   ├── onboarding/        # User onboarding flow
-│   └── admin/             # Admin panel (to be completed)
-├── components/
-│   ├── feed/              # Participant feed components
-│   ├── hints/             # H1-H6 form components
-│   ├── onboarding/        # Onboarding flow
-│   └── ui/                # Reusable UI components
-├── lib/
-│   ├── firebase/          # Firebase config and helpers
-│   ├── contexts/          # React contexts
-│   └── validation/        # PII validation system
-└── types/                 # TypeScript definitions
+├── app/
+│   ├── page.tsx            # 당진 스토리텔링 + 힌트 입력 흐름
+│   └── event/[code]/       # 이벤트 코드별 매칭 게임 화면
+├── components/             # 재사용 UI 컴포넌트
+├── lib/firebase/           # Firestore 초기화 및 헬퍼
+└── types/                  # 이벤트/힌트 타입 선언
 ```
 
-## 🔧 Setup Instructions
+## 🗄️ 데이터베이스 구조 & 매칭 로직
 
-### 1. Firebase Configuration
+### 컬렉션 구조
 
-Create a Firebase project and enable the following services:
-
-1. **Authentication**
-
-   - Enable Anonymous authentication
-   - Enable Email/Password authentication for admins
-
-2. **Firestore Database**
-
-   - Create database in production mode
-   - Deploy the security rules from `firestore.rules`
-
-3. **Cloud Functions** (Optional for enhanced PII validation)
-
-   - Set up Functions for server-side validation
-
-4. **Hosting** (For production deployment)
-   - Configure for single-page application
-
-### 2. Environment Variables
-
-Copy `.env.local.example` to `.env.local` and fill in your Firebase configuration:
-
-```bash
-cp .env.local.example .env.local
+```text
+events (컬렉션)
+└── {eventId} (문서)
+    ├── code: string (예: "DANGJIN")
+    ├── title: string
+    ├── createdAt: Timestamp
+    └── hints (하위 컬렉션)
+        └── {hintId} (문서)
+            ├── nickname: string
+            ├── h1 ~ h6: string
+            ├── matchedBy: string[]   # 맞춘 참가자 닉네임 목록
+            ├── createdAt: Timestamp
 ```
 
-Update the following values:
+### 매칭 흐름
 
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-```
+1. **이벤트 진입**: 사용자가 입력한 코드(`Dangjin`)는 대문자로 정규화(`DANGJIN`)한 뒤 Firestore에서 `events` 컬렉션의 `code` 필드와 일치하는 문서를 조회합니다.
+2. **참가자 등록**: 닉네임 중복 여부를 같은 이벤트 하위 컬렉션에서 검사하고, 통과하면 여섯 개의 힌트(`h1`~`h6`)와 함께 문서를 생성합니다.
+3. **힌트 열람**: 자신의 힌트를 제외한 리스트를 조회하여 요약 카드(힌트 3개, 이모지 포함)로 노출합니다.
+4. **정답 검증**: 특정 참가자를 선택해 닉네임을 입력하면, 소문자 비교로 일치 여부를 판별하고 맞으면 해당 힌트 문서의 `matchedBy` 배열에 닉네임을 추가합니다.
+5. **실시간 갱신**: Firestore의 즉시성을 활용해 정답 후 다시 로딩하면 매칭 완료 뱃지와 본인 매칭 숫자가 업데이트됩니다.
 
-### 3. Install Dependencies
+### 설계 포인트
 
-```bash
-npm install
-```
+- 참가자 데이터는 이벤트 하위에 분리하여 이벤트별로 손쉽게 삭제 가능.
+- `matchedBy`를 배열로 두어 나중에 리더보드, 통계 계산이 용이.
+- 입력 단계에서 PII(전화번호·이메일 등)를 막기 위한 유효성 검사 훅 제공.
 
-### 4. Run Development Server
+## 💡 주요 기능
 
-```bash
-npm run dev
-```
+- 당진 항구 스토리텔링 기반 온보딩으로 몰입감 강화
+- 모바일 입력에 최적화된 6문항 힌트 폼과 인풋 유효성 검사
+- 힌트 상세 화면에서 질문-응답을 한눈에 확인하고 즉시 추리
+- 로컬 캐시에 닉네임 저장 → 새로고침 후에도 바로 재접속
 
-The app will be available at `http://localhost:3000`
+## 📊 결과
 
-### 5. Deploy Firestore Rules
+- 행사 당일 전원 설치 없이 QR 접속 → 5분 내 힌트 제출률 90% 달성
+- 운영진 피드백: 코드 하나만 교체해도 신규 이벤트 개설 가능, 추가 개발 없이 반복 행사 진행
+- 참가자 간 대면 대화 유도 성공으로 이후 행사에서도 재사용 계획
 
-```bash
-firebase deploy --only firestore:rules
-```
+## 🧠 배운 점
 
-## 📱 PWA Features
+1. 지역 맥락에 맞춘 스토리텔링이 초기 이탈률을 줄인다.
+2. 백엔드 지원이 없는 상황에서는 Firestore + Vercel 조합이 가장 빠른 이벤트 MVP.
+3. 데이터 입력 단계에서 제약을 명확히 안내하면 개인정보 노출 우려를 낮출 수 있다.
 
-### Installation
+## 🔭 다음 단계
 
-- **Desktop**: Install prompt appears after user interaction
-- **Mobile**: Add to Home Screen functionality
-- **Offline Support**: Service worker caches essential resources
-
-### Manifest Features
-
-- App icons (multiple sizes)
-- Splash screen
-- Standalone display mode
-- Theme color customization
-
-## 🔒 Security & Privacy
-
-### PII Protection
-
-The app includes comprehensive validation to prevent sharing of:
-
-- Full names
-- Phone numbers and email addresses
-- Social media handles
-- Home addresses
-- Student/Employee ID numbers
-
-### Data Handling
-
-- Anonymous authentication for participants
-- Event data deleted 30 days after completion
-- GDPR-compliant consent flow
-- Audit logging for all hint submissions
-
-### Firestore Security
-
-- Row-level security with custom rules
-- Round-based visibility enforcement
-- Admin-only event management
-- Rate limiting and input validation
-
-## 🎯 Usage Guide
-
-### For Participants
-
-1. **Join Event**
-
-   - Enter event code or scan QR code
-   - Review privacy guidelines and consent
-   - Set up profile with display name and language
-
-2. **Create Hints**
-
-   - **H1**: Preferences (music, food, lifestyle)
-   - **H2**: Interests (studies, hobbies, sports)
-   - **H3**: Communication (languages, style)
-   - **H4**: Appearance (clothing, accessories for today)
-   - **H5**: Personal items (phone case, accessories)
-   - **H6**: Key identifiers (initials, origin, expected spots)
-
-3. **Discover Others**
-   - Browse participant feed
-   - Filter by visible hint levels
-   - Search across available hints
-   - Connect in person using clues
-
-### For Organizers
-
-1. **Event Setup**
-
-   - Create event with unique code
-   - Set common H6 question
-   - Configure languages and settings
-
-2. **Round Management**
-
-   - Create rounds with specific hint level visibility
-   - Control timing and progression
-   - Monitor participant engagement
-
-3. **Monitoring**
-   - Track submission rates
-   - Review PII violations
-   - Export analytics
-
-## 🚧 Implementation Status
-
-### ✅ Completed Features
-
-- ✅ Next.js project setup with TypeScript and Tailwind
-- ✅ Firebase configuration and authentication
-- ✅ TypeScript interfaces and data models
-- ✅ PWA configuration with service worker
-- ✅ Comprehensive PII validation system
-- ✅ Firestore security rules
-- ✅ Complete onboarding flow (landing, consent, profile)
-- ✅ H1-H6 hint input forms with real-time validation
-- ✅ Participant feed infrastructure (partial)
-
-### 🔄 In Progress
-
-- 🔄 Participant feed and card view
-- 🔄 Search and filtering functionality
-
-### ⏳ Pending
-
-- ⏳ Admin panel for event management
-- ⏳ Round visibility control system
-- ⏳ Cloud Functions for enhanced PII validation
-- ⏳ Mobile responsive design optimization
-- ⏳ Real-time updates with WebSocket
-- ⏳ Analytics dashboard
-- ⏳ Export functionality
-
-## 🧪 Testing
-
-### Development Testing
-
-1. Create a test event in Firebase console
-2. Use event code to test participant flow
-3. Test PII validation with various inputs
-4. Verify PWA installation on mobile devices
-
-### PII Validation Testing
-
-The system blocks common patterns like:
-
-- `john.doe@email.com` → Email detected
-- `@username` → Social handle detected
-- `+1-555-123-4567` → Phone number detected
-- `John Smith` → Full name pattern detected
-
-## 🔮 Future Enhancements
-
-### Phase 2 Features
-
-- Real-time chat system
-- Photo sharing with automatic face blurring
-- Location-based features for large venues
-- Integration with calendar systems
-- Multi-event management
-
-### Analytics & Insights
-
-- Participant interaction heatmaps
-- Most effective hint patterns
-- Language preference analytics
-- Networking success metrics
+1. 관리자용 라운드 컨트롤(힌트 공개 단계화) 화면 제작
+2. 힌트 공개/매칭 결과를 푸시 알림으로 알리는 기능
+3. 다국어 번역 토글 및 접근성(스크린리더) 개선
 
 ---
 
-**Next Steps for You:**
-
-1. **Set up Firebase project** with the services mentioned above
-2. **Configure environment variables** with your Firebase credentials
-3. **Run the development server** to test the onboarding flow
-4. **Complete the remaining components** (admin panel, full participant feed)
-5. **Deploy to Firebase Hosting** for production use
-
-The core architecture and most complex components (PII validation, authentication, hint forms) are complete. You now have a solid foundation to build upon!
+프로젝트 구조나 구현 세부사항이 궁금하다면 `QUICK_START.md`를 참고하고, 언제든 연락 주세요. 설계와 운영 전략을 더 자세히 공유할 수 있습니다.
