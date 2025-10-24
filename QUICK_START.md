@@ -30,7 +30,7 @@ Firebase Console → Firestore Database → 데이터 추가:
 **컬렉션**: `events`
 **문서 ID**: (자동 생성 버튼 클릭)
 **필드 추가**:
-- `code` (string): `KOPLE2025`
+- `code` (string): `Dangjin`
 - `title` (string): `코플 매칭 게임`
 - `createdAt` (timestamp): 현재 시간
 
@@ -69,7 +69,7 @@ vercel --prod
 🎮 매칭 게임 참여하기
 https://your-app.vercel.app
 
-이벤트 코드: KOPLE2025
+이벤트 코드: Dangjin
 ```
 
 ---
@@ -78,7 +78,7 @@ https://your-app.vercel.app
 
 ### 참가자 (각자 핸드폰에서):
 1. 링크 접속
-2. 이벤트 코드 입력: `KOPLE2025`
+2. 이벤트 코드 입력: `Dangjin`
 3. 닉네임 입력 (예: `홍길동`)
 4. 힌트 6개 입력
    - H1. 가장 좋아하는 음악 장르
@@ -119,7 +119,7 @@ npm run dev
 ## ✅ 체크리스트
 
 - [ ] Firebase 규칙 설정
-- [ ] 테스트 이벤트 생성 (`KOPLE2025`)
+- [ ] 테스트 이벤트 생성 (`Dangjin`)
 - [ ] 로컬 빌드 성공 확인
 - [ ] Vercel 배포
 - [ ] 핸드폰에서 테스트 (2명 이상)

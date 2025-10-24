@@ -82,7 +82,7 @@ vercel --prod
 
 ## 📝 사용 방법
 
-1. Firebase에서 이벤트 생성 (코드: `KOPLE2025`)
+1. Firebase에서 이벤트 생성 (코드: `Dangjin`)
 2. Vercel에 배포
 3. 생성된 URL을 24명에게 공유
 4. 각자 핸드폰에서 접속
