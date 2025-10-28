@@ -139,8 +139,17 @@ export default function EventPage() {
     );
   }
 
-  const otherHints = hints.filter((hint) => hint.nickname !== myNickname);
   const myHintEntries = hints.filter((hint) => hint.nickname === myNickname);
+  const otherHints = hints.filter((hint) => hint.nickname !== myNickname);
+  const myPrimaryHint = myHintEntries[0] ?? null;
+  const totalParticipants = hints.length;
+  const myParticipantNumber = myPrimaryHint?.order;
+  const myTargetNumber =
+    typeof myParticipantNumber === 'number' && totalParticipants > 0
+      ? myParticipantNumber === totalParticipants
+        ? 1
+        : myParticipantNumber + 1
+      : null;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4 py-10">
@@ -153,6 +162,15 @@ export default function EventPage() {
           <p className="mt-2 text-sm text-amber-100/80">
             My Nickname: <strong>{myNickname}</strong> | Matched: <strong>{myMatches.length} people</strong>
           </p>
+          {typeof myParticipantNumber === 'number' && myTargetNumber !== null && (
+            <p className="mt-1 text-sm text-amber-100/80">
+              🔢 My Number: <strong>#{myParticipantNumber}</strong> → Find Participant{' '}
+              <strong>#{myTargetNumber}</strong>
+              {totalParticipants === 1 && myTargetNumber === myParticipantNumber
+                ? ' (looping back to yourself until more players join)'
+                : ''}
+            </p>
+          )}
         </header>
 
         {selectedHint ? (
@@ -228,21 +246,31 @@ export default function EventPage() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {otherHints.map((hint) => {
                     const matched = hint.matchedBy.includes(myNickname);
+                    const isTarget = myTargetNumber === hint.order;
                     return (
                       <button
                         key={hint.id}
                         onClick={() => setSelectedHint(hint)}
-                        className="rounded-2xl bg-gray-900/70 px-4 py-5 text-left shadow-md ring-1 ring-amber-500/20 transition hover:-translate-y-1 hover:shadow-lg"
+                        className={`rounded-2xl bg-gray-900/70 px-4 py-5 text-left shadow-md ring-1 ring-amber-500/20 transition hover:-translate-y-1 hover:shadow-lg ${
+                          isTarget ? 'border border-amber-400 ring-2 ring-amber-400 shadow-amber-400/20' : ''
+                        }`}
                       >
                         <div className="flex items-start justify-between">
                           <h3 className="text-base font-semibold text-amber-100">
                             Participant #{hint.order}
                           </h3>
-                          {matched && (
-                            <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-300">
-                              ✓ Matched
-                            </span>
-                          )}
+                          <div className="flex items-center gap-2">
+                            {isTarget && (
+                              <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-200">
+                                🎯 Your Target
+                              </span>
+                            )}
+                            {matched && (
+                              <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-300">
+                                ✓ Matched
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <div className="mt-4 space-y-2 text-sm text-amber-100/80">
                           <div>👗 {hint.h1}</div>
