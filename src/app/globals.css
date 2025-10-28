@@ -24,3 +24,41 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.pumpkin-fall {
+  top: -10vh;
+  animation-name: pumpkinFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  opacity: 0;
+  filter: drop-shadow(0 8px 12px rgba(255, 140, 0, 0.25));
+}
+
+.pumpkin-fall:nth-child(odd) {
+  animation-direction: normal;
+}
+
+.pumpkin-fall:nth-child(even) {
+  animation-direction: reverse;
+}
+
+@keyframes pumpkinFall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(calc(var(--pumpkin-drift, 40px) / 2), 50vh, 0)
+      rotate(180deg);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(calc(var(--pumpkin-drift, 40px) * 1.5), 110vh, 0)
+      rotate(360deg);
+    opacity: 0;
+  }
+}

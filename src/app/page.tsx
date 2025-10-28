@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import FallingPumpkins from "@/components/FallingPumpkins";
 import { db } from "@/lib/firebase/config";
 
 export default function HomePage() {
@@ -152,8 +153,10 @@ export default function HomePage() {
   const isJoinMode = formMode === "join";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4 py-10">
-      <div className="mx-auto max-w-xl space-y-6">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4 py-10">
+      <FallingPumpkins />
+
+      <div className="relative z-10 mx-auto max-w-xl space-y-6">
         <header className="text-center text-white drop-shadow-sm">
           <p className="mx-auto inline-flex items-center rounded-full bg-amber-500/20 px-3 py-1 text-sm font-semibold uppercase tracking-wide text-amber-200 backdrop-blur">
             Matching Success!

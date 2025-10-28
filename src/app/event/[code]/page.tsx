@@ -13,6 +13,7 @@ import {
   updateDoc,
   where
 } from 'firebase/firestore';
+import FallingPumpkins from '@/components/FallingPumpkins';
 import { db } from '@/lib/firebase/config';
 
 interface Hint {
@@ -128,8 +129,9 @@ export default function EventPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4">
-        <div className="text-center text-amber-100">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4">
+        <FallingPumpkins />
+        <div className="relative z-10 text-center text-amber-100">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-amber-500/40 border-t-transparent"></div>
           <p className="text-sm font-semibold">Loading hints...</p>
         </div>
@@ -141,8 +143,9 @@ export default function EventPage() {
   const myHintEntries = hints.filter((hint) => hint.nickname === myNickname);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4 py-10">
-      <div className="mx-auto max-w-5xl space-y-6">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-purple-900 via-gray-900 to-black px-4 py-10">
+      <FallingPumpkins />
+      <div className="relative z-10 mx-auto max-w-5xl space-y-6">
         <header className="rounded-3xl bg-purple-950/60 p-6 shadow-xl ring-1 ring-amber-500/30 backdrop-blur">
           <h1 className="text-2xl font-extrabold text-amber-200 sm:text-3xl">
             🎮 {eventCode} Matching Game
