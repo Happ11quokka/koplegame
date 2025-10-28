@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
 // Core Types
-export type HintLevel = 'H1' | 'H2' | 'H3' | 'H4' | 'H5';
+export type HintLevel = 'H1' | 'H2' | 'H3' | 'H4';
 export type Language = 'en' | 'ko' | 'ja' | 'zh' | 'es' | 'fr';
 export type EventStatus = 'draft' | 'waiting_for_matching' | 'live' | 'ended';
 export type MatchStatus = 'pending' | 'found' | 'completed';
@@ -81,38 +81,17 @@ export interface ParticipantAccount {
 
 // Hint System
 export interface HintPayload {
-  // H1: Preferences (most abstract)
-  musicGenre?: string;
-  faveSong?: string;
-  coffeeOrTea?: 'coffee' | 'tea' | 'both' | 'neither';
-  taste?: 'sweet' | 'salty' | 'both' | 'neither';
-  chronotype?: 'morning' | 'evening' | 'flexible';
+  // H1: Outfit concept
+  outfitConcept?: string;
 
-  // H2: Interests & Background
-  majorOrDomain?: string;
-  sportsTeam?: string;
-  travelStyle?: 'photo' | 'food' | 'hiking' | 'history' | 'adventure' | 'relaxation';
-  hobbies?: string[];
+  // H2: Appearance confidence
+  standoutFeature?: string;
 
-  // H3: Language & Communication
-  languages?: Language[];
-  languageNote?: string;
-  favEmojis?: string[];
-  communicationStyle?: 'formal' | 'casual' | 'mixed';
-
-  // H4: Physical Appearance (for on-site observation)
+  // H3: Outfit detail
   topColor?: string;
-  glasses?: boolean;
-  cap?: boolean;
-  shoesColor?: string;
-  bagType?: 'backpack' | 'crossbody' | 'tote' | 'none';
-  height?: 'short' | 'average' | 'tall';
 
-  // H5: Personal Items & Details
-  phoneCase?: string;
-  wristAccessory?: 'none' | 'watch' | 'bracelet' | 'both';
-  uniqueAccessory?: string;
-
+  // H4: Companion
+  companionDescription?: string;
 }
 
 export interface Hint {
