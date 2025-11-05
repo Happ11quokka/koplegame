@@ -1,50 +1,136 @@
-# 🚀 빠른 시작 가이드 (24명 모바일 게임용)
+# 🚀 Quick Start Guide
 
-## 1️⃣ Firebase 규칙 설정 (필수)
+개발자 및 운영자를 위한 빠른 설정 가이드입니다.
 
-Firebase Console → Firestore Database → 규칙 탭에 다음 규칙 붙여넣기:
+## 📋 사전 요구사항
+
+- Node.js 20 이상
+- npm 또는 yarn
+- Firebase 프로젝트 (무료 Spark 플랜 가능)
+- Vercel 계정 (배포 시)
+
+## 🔧 로컬 개발 환경 설정
+
+### 1. 프로젝트 클론 및 의존성 설치
+
+```bash
+git clone <repository-url>
+cd Kople_game
+npm install
+```
+
+### 2. Firebase 프로젝트 설정
+
+#### Firebase Console에서 프로젝트 생성
+
+1. [Firebase Console](https://console.firebase.google.com/) 접속
+2. "프로젝트 추가" 클릭
+3. 프로젝트 이름 입력 후 생성
+
+#### Firestore Database 활성화
+
+1. Firebase Console → Firestore Database
+2. "데이터베이스 만들기" 클릭
+3. 테스트 모드로 시작 (나중에 보안 규칙 설정)
+4. 리전 선택: `asia-northeast3` (서울) 권장
+
+#### Firebase 설정 정보 복사
+
+1. Firebase Console → 프로젝트 설정 (⚙️)
+2. "내 앱"에서 웹 앱 추가 (`</>` 아이콘)
+3. 앱 닉네임 입력 후 등록
+4. Firebase SDK 구성 정보 복사
+
+### 3. 환경 변수 설정
+
+`.env.local.example` 파일을 복사하여 `.env.local` 생성:
+
+```bash
+cp .env.local.example .env.local
+```
+
+`.env.local` 파일에 Firebase 설정 정보 입력:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
+NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+### 4. Firestore 보안 규칙 설정
+
+Firebase Console → Firestore Database → 규칙 탭에 다음 규칙 적용:
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /events/{eventId} {
-      allow read, write: if true;
+      // 이벤트 문서는 모두 읽기 가능
+      allow read: if true;
+      allow write: if false;  // 콘솔에서만 생성
 
-      match /{document=**} {
-        allow read, write: if true;
+      // 하위 컬렉션 (hints)
+      match /hints/{hintId} {
+        allow read: if true;
+        allow create: if request.auth != null;
+        allow update: if request.auth != null;
+        allow delete: if false;
       }
     }
   }
 }
 ```
 
-**⚠️ 주의: 이건 테스트용입니다. 나중에 보안 규칙 적용 필요**
+**⚠️ 주의**: 프로덕션 환경에서는 더 엄격한 보안 규칙을 적용하세요.
 
----
+### 5. 테스트 이벤트 생성
 
-## 2️⃣ 테스트 이벤트 만들기
+Firebase Console → Firestore Database → 데이터:
 
-Firebase Console → Firestore Database → 데이터 추가:
+1. 컬렉션 시작: `events`
+2. 문서 ID: 자동 생성
+3. 필드 추가:
+   - `code` (string): `DANGJIN` (대문자)
+   - `title` (string): `코플 매칭 게임`
+   - `createdAt` (timestamp): 현재 시간
 
-**컬렉션**: `events`
-**문서 ID**: (자동 생성 버튼 클릭)
-**필드 추가**:
-
-- `code` (string): `DANGJIN`
-- `title` (string): `코플 매칭 게임`
-- `createdAt` (timestamp): 현재 시간
-
-저장하면 끝!
-
----
-
-## 3️⃣ Vercel 배포 (핸드폰으로 접속용)
-
-### 방법 1: Vercel CLI 사용
+### 6. 로컬 서버 실행
 
 ```bash
-# Vercel CLI 설치 (처음만)
+npm run dev
+```
+
+브라우저에서 `http://localhost:3000` 접속
+
+#### 모바일에서 테스트
+
+같은 WiFi에 연결 후:
+1. 터미널에 표시된 Network URL 확인 (예: `http://192.168.0.100:3000`)
+2. 모바일 브라우저에서 해당 URL 접속
+
+## 🌐 프로덕션 배포
+
+### Vercel 배포 (권장)
+
+#### 방법 1: GitHub 연동
+
+1. GitHub에 저장소 푸시
+2. [Vercel](https://vercel.com) 접속 및 로그인
+3. "New Project" 클릭
+4. GitHub 저장소 선택
+5. 환경 변수 설정:
+   - `.env.local`의 모든 변수 추가
+6. "Deploy" 클릭
+
+#### 방법 2: Vercel CLI
+
+```bash
+# Vercel CLI 설치
 npm install -g vercel
 
 # 배포
@@ -54,92 +140,144 @@ vercel
 vercel --prod
 ```
 
-### 방법 2: GitHub 연동 (추천)
+### Firebase Hosting (선택사항)
 
-1. GitHub에 코드 푸시
-2. [Vercel](https://vercel.com) 접속
-3. "New Project" → GitHub 저장소 선택
-4. 환경 변수 설정 **없이** 바로 Deploy
-5. 생성된 URL 복사 (예: `https://your-app.vercel.app`)
+```bash
+# Firebase CLI 설치
+npm install -g firebase-tools
 
----
+# 로그인
+firebase login
 
-## 4️⃣ 24명에게 URL 공유
+# 빌드
+npm run build
 
-배포된 URL을 카카오톡/문자로 공유:
+# 배포
+firebase deploy --only hosting
+```
+
+## 🎮 새 이벤트 생성하기
+
+### 1. Firestore에서 이벤트 문서 생성
+
+Firebase Console → Firestore Database:
+
+```
+컬렉션: events
+문서 ID: (자동 생성)
+필드:
+  - code: "NEWEVENT" (대문자, 고유값)
+  - title: "새 이벤트 이름"
+  - createdAt: [현재 시간]
+```
+
+### 2. 참가자에게 URL 공유
 
 ```
 🎮 매칭 게임 참여하기
 https://your-app.vercel.app
 
-이벤트 코드: Dangjin
+이벤트 코드: NEWEVENT
 ```
 
----
-
-## 5️⃣ 게임 진행 방법
-
-### 참가자 (각자 핸드폰에서):
-
-1. 링크 접속
-2. 이벤트 코드 입력: `Dangjin`
-3. 닉네임 입력 (예: `홍길동`)
-4. 힌트 4개 입력
-   - H1. 오늘의 나의 룩 콘셉트
-   - H2. 내 외모 중 가장 자신 있는 부분
-   - H3. 내가 입은 상의 색깔
-   - H4. 누구와 함께 왔는지, 함께 온 친구 소개
-5. 제출 후 다른 사람 힌트 보기
-6. 힌트 보고 누군지 맞추기!
-
----
-
-## 6️⃣ 모바일 최적화
-
-✅ 반응형 디자인 적용
-✅ 터치 최적화
-✅ 모바일 브라우저에서 바로 사용
-✅ 별도 앱 설치 불필요
-
----
-
-## 7️⃣ 로컬 테스트 (배포 전)
+## 🛠 주요 명령어
 
 ```bash
-npm run build
+# 개발 서버 (Turbopack)
 npm run dev
+
+# 프로덕션 빌드
+npm run build
+
+# 프로덕션 서버 실행
+npm run start
+
+# 린트 검사
+npm run lint
 ```
 
-브라우저에서: `http://localhost:3000`
+## 📊 데이터 구조
 
-핸드폰에서 테스트하려면:
+```
+events (컬렉션)
+└── {eventId}
+    ├── code: string           # 이벤트 코드 (대문자)
+    ├── title: string          # 이벤트 제목
+    ├── createdAt: Timestamp
+    └── hints (하위 컬렉션)
+        └── {hintId}
+            ├── nickname: string      # 참가자 닉네임
+            ├── h1: string           # 힌트 1
+            ├── h2: string           # 힌트 2
+            ├── h3: string           # 힌트 3
+            ├── h4: string           # 힌트 4
+            ├── matchedBy: string[]  # 맞춘 사람 목록
+            └── createdAt: Timestamp
+```
 
-1. 같은 WiFi에 연결
-2. 터미널에 표시된 Network URL 접속 (예: `http://172.30.1.37:3000`)
+## 🔍 문제 해결
 
----
+### Q: "Event not found" 에러
 
-## ✅ 체크리스트
+**원인**: Firestore에 해당 이벤트가 없거나 코드가 일치하지 않음
 
-- [ ] Firebase 규칙 설정
-- [ ] 테스트 이벤트 생성 (`Dangjin`)
-- [ ] 로컬 빌드 성공 확인
-- [ ] Vercel 배포
-- [ ] 핸드폰에서 테스트 (2명 이상)
-- [ ] 24명에게 URL 공유
+**해결**:
+- Firebase Console에서 이벤트 생성 확인
+- `code` 필드가 대문자인지 확인
+- Firestore 보안 규칙 확인
 
----
+### Q: 힌트가 저장되지 않음
 
-## 🔧 문제 해결
+**원인**: Firestore 보안 규칙 또는 인증 문제
 
-### Q: 힌트가 안 보여요
+**해결**:
+- Firestore 규칙에서 `allow create: if request.auth != null;` 확인
+- Firebase Authentication에서 익명 로그인 활성화 확인
+- 브라우저 콘솔에서 에러 메시지 확인
 
-A: Firebase 규칙이 제대로 설정되었는지 확인
+### Q: 빌드 실패
 
-### Q: 이벤트 코드를 찾을 수 없다고 나와요
+**원인**: 환경 변수 누락 또는 타입 에러
 
-A: Firebase에서 이벤트가 생성되었는지, `code` 필드가 정확한지 확인
+**해결**:
+```bash
+# 환경 변수 확인
+cat .env.local
 
-### Q: 핸드폰에서 느려요
+# 타입 체크
+npm run build
+```
 
-A: WiFi 연결 확인, Firebase 리전 확인 (아시아-northeast3 권장)
+### Q: 모바일에서 느림
+
+**원인**: Firebase 리전 또는 네트워크 이슈
+
+**해결**:
+- Firestore 리전을 `asia-northeast3` (서울)로 설정
+- 이미지 최적화 확인
+- 네트워크 탭에서 느린 요청 확인
+
+## 📚 추가 자료
+
+- [Next.js 문서](https://nextjs.org/docs)
+- [Firebase 문서](https://firebase.google.com/docs)
+- [Vercel 문서](https://vercel.com/docs)
+- [Tailwind CSS 문서](https://tailwindcss.com/docs)
+
+## 🤝 기여하기
+
+이슈 또는 PR을 환영합니다!
+
+## 📝 체크리스트
+
+프로덕션 배포 전 확인사항:
+
+- [ ] Firebase 프로젝트 생성 완료
+- [ ] Firestore 보안 규칙 설정
+- [ ] `.env.local` 환경 변수 설정
+- [ ] 테스트 이벤트 생성 및 테스트
+- [ ] 로컬 빌드 성공 (`npm run build`)
+- [ ] 모바일에서 테스트 완료
+- [ ] Vercel 배포 완료
+- [ ] 프로덕션 환경 변수 설정
+- [ ] 실제 이벤트 생성 및 URL 공유
