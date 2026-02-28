@@ -1,80 +1,100 @@
-# Matching Game — 매칭 게임
+# Kople Game — 실시간 힌트 기반 매칭 게임
 
-실시간 힌트 기반 매칭 게임 플랫폼입니다. 참가자들이 힌트를 제출하고, 서로의 정체를 추리하며 자연스럽게 대화를 시작할 수 있도록 돕습니다.
+참가자들이 힌트를 제출하고, 서로의 정체를 추리하며 자연스럽게 대화를 시작할 수 있도록 돕는 실시간 소셜 매칭 플랫폼입니다.
 
-## 🎯 주요 기능
+![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-DD2C00?logo=firebase&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
 
-- **힌트 기반 매칭**: 4개의 힌트를 제출하고 다른 참가자의 힌트를 보며 추리
-- **실시간 게임**: Firebase Firestore로 즉시 업데이트되는 참가자 정보
-- **이벤트 코드 시스템**: 코드 하나로 간편하게 이벤트별 게임 방 생성
-- **모바일 최적화**: PWA 지원으로 별도 앱 설치 없이 모바일에서 바로 사용
-- **닉네임 캐싱**: 재접속 시 자동으로 닉네임 복구
+![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?logo=pwa&logoColor=white)
 
-## 🚀 빠른 시작
+---
 
-### 1. 게임 참여하기
+## 스크린샷
 
-1. 주최자로부터 받은 링크로 접속
-2. 이벤트 코드 입력 (예: `DANGJIN`)
-3. 닉네임 입력
-4. 4가지 힌트 작성 및 제출
-5. 다른 참가자의 힌트를 보고 추리하기!
+| 홈 화면 | 이벤트 화면 |
+|:---:|:---:|
+| ![홈 화면](docs/screenshots/home.png) | ![이벤트 화면](docs/screenshots/event.png) |
 
-### 2. 힌트 작성 예시
+## 프로젝트 소개
 
-- **H1. 오늘의 나의 룩 콘셉트**: 캐주얼
-- **H2. 내 외모 중 가장 자신 있는 부분**: 미소
-- **H3. 내가 입은 상의 색깔**: 검은색
-- **H4. 누구와 함께 왔는지**: 친구와 함께
+**Kople Game**은 대한민국 최대 외국인 커뮤니티 [코플(Kople)](https://www.thekople.com/)의 오프라인 모임에서 어색한 분위기를 깨고 자연스러운 대화를 유도하기 위해 제작한 실시간 매칭 웹앱입니다.
 
-### 3. 게임 진행 방법
+각 참가자는 자신을 설명하는 4가지 힌트를 제출하고, 다른 참가자의 힌트를 보며 해당 인물이 누구인지 추리합니다. 정답을 맞히면 매칭이 완료되며, 이 과정에서 참가자들이 서로에게 먼저 말을 걸 수 있는 계기를 만들어 줍니다.
 
-1. **힌트 제출 후**: 다른 참가자들의 힌트 카드 확인
-2. **추리하기**: 힌트를 보고 해당 인물 찾기
-3. **정답 확인**: 닉네임을 입력하여 맞는지 확인
-4. **매칭 성공**: 정답이면 자동으로 매칭 완료 표시
+- 이벤트 코드 하나로 게임 방을 즉시 생성하여 **진입 장벽 최소화**
+- Firestore 실시간 동기화로 **별도 새로고침 없이 즉시 반영**
+- PWA 지원으로 **앱 설치 없이 모바일에서 바로 사용 가능**
 
-## 🛠 기술 스택
+## 주요 기능
 
-- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
-- **Backend**: Firebase Firestore, Firebase Authentication
-- **Deployment**: Vercel
-- **PWA**: Service Worker, Web Manifest
+- **힌트 기반 매칭 시스템** — 4개의 힌트를 제출하고 다른 참가자의 힌트를 보며 추리
+- **실시간 동기화** — Firebase Firestore 기반으로 참가자 정보가 즉시 업데이트
+- **이벤트 코드 시스템** — 코드 하나로 간편하게 이벤트별 게임 방 생성
+- **PWA 지원** — Service Worker와 Web Manifest로 앱처럼 설치 가능
+- **닉네임 캐싱** — 로컬 스토리지 기반으로 재접속 시 자동 닉네임 복구
+- **개인정보 보호** — 전화번호/이메일 입력 방지 유효성 검사, 익명 인증
 
-## 📂 프로젝트 구조
+## 기술 스택
+
+| 분류 | 기술 |
+|------|------|
+| Framework | Next.js 15 (App Router) |
+| UI | React 19, Tailwind CSS 4 |
+| Language | TypeScript 5 |
+| Backend | Firebase Firestore, Firebase Authentication |
+| Deployment | Vercel |
+| PWA | Service Worker, Web Manifest |
+
+## 아키텍처
+
+```
+Client (Next.js + React)
+    │
+    ├── Firebase Auth ─── 익명 인증
+    │
+    └── Firestore ─── 실시간 동기화 (onSnapshot)
+            │
+            ├── events/{code}          # 이벤트 메타 정보
+            └── events/{code}/players  # 참가자 힌트 및 매칭 상태
+```
+
+## 프로젝트 구조
 
 ```
 src/
 ├── app/
+│   ├── layout.tsx                  # 루트 레이아웃
 │   ├── page.tsx                    # 홈페이지 (이벤트 코드 입력)
-│   └── event/[code]/               # 이벤트별 게임 화면
-├── components/                      # 재사용 가능한 UI 컴포넌트
+│   ├── globals.css                 # 글로벌 스타일
+│   └── event/[code]/
+│       └── page.tsx                # 이벤트별 게임 화면
+├── components/
+│   └── FallingPumpkins.tsx         # 시즌 이벤트 컴포넌트
 ├── lib/
-│   └── firebase/                   # Firebase 설정 및 헬퍼 함수
-└── types/                          # TypeScript 타입 정의
+│   └── firebase/
+│       ├── config.ts               # Firebase 설정
+│       ├── auth.ts                 # 인증 헬퍼
+│       └── analytics.ts            # 애널리틱스
+└── types/
+    └── index.ts                    # TypeScript 타입 정의
 ```
 
-## 🔧 운영 가이드
+## 실행 방법
 
-새로운 이벤트를 생성하거나 로컬에서 개발하는 방법은 [QUICK_START.md](QUICK_START.md)를 참고하세요.
+```bash
+# 의존성 설치
+npm install
 
-## 📱 모바일 지원
+# 개발 서버 실행
+npm run dev
+```
 
-- ✅ 반응형 디자인
-- ✅ 터치 최적화
-- ✅ PWA 지원 (앱처럼 설치 가능)
-- ✅ 오프라인 대응
+`.env.local` 파일에 Firebase 설정이 필요합니다. [QUICK_START.md](QUICK_START.md)를 참고하세요.
 
-## 🔒 개인정보 보호
-
-- 전화번호, 이메일 등 개인정보 입력 방지를 위한 유효성 검사
-- 닉네임은 로컬 스토리지에만 저장
-- Firebase 익명 인증 사용
-
-## 📄 라이선스
+## 라이선스
 
 ISC
-
----
-
-문의사항이 있으시면 이슈를 생성해주세요.
